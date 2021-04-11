@@ -10,13 +10,13 @@ namespace Oscilloscope_Clock
     // This class contains badly-drawn characters that are returned based on ASCII input
     // Don't worry, I will think of a way to only load them as needed, not all at once
     // This is mostly a "proof of concept," and will be intended to operate on its own thread
-    class ASCII
+    class ScopeGraphics
     {
         private List<Point>[] ascii;
         private int range;
 
         // INITIALIZATION
-        public ASCII()
+        public ScopeGraphics()
         {
             // initialize all the point lists
             ascii = new List<Point>[128];

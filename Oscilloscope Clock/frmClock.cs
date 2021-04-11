@@ -20,7 +20,7 @@ namespace Oscilloscope_Clock
         Thread runningThread;
         SoundPlayer display;
         List<Point> time;
-        ASCII ascii;
+        ScopeGraphics graphics;
         Boolean running;
 
         // INITIALIZATION
@@ -33,7 +33,7 @@ namespace Oscilloscope_Clock
 
             // initialize the time and ASCII class
             time = new List<Point>();
-            ascii = new ASCII();
+            graphics = new ScopeGraphics();
 
             // clock display worker
             displayWorker = new BackgroundWorker();
@@ -54,7 +54,7 @@ namespace Oscilloscope_Clock
         protected override void OnClosed(EventArgs e)
         {
             running = false;
-            runningThread.Abort();
+            runningThread.Join();
         }
 
         // GENERATES WAVE BASED ON PARAMETERS
@@ -168,7 +168,7 @@ namespace Oscilloscope_Clock
                     if (displayWorker.IsBusy) display.Stop();
                     newTime = DateTime.Now.ToString("HH:mm");
                     time.Clear();
-                    time.AddRange(ascii.getString(newTime));
+                    time.AddRange(graphics.getString(newTime));
                     displayWorker.RunWorkerAsync();
 
                     // Clock will update every 60 seconds on every iteration after the first
