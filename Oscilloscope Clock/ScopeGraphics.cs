@@ -7,195 +7,202 @@ using System.Drawing;
 
 namespace Oscilloscope_Clock
 {
-    public class ScopeGraphics
+    // This class contains badly-drawn characters that are returned based on ASCII input
+    // Don't worry, I will think of a way to only load them as needed, not all at once
+    // This is mostly a "proof of concept," and will be intended to operate on its own thread
+    class ScopeGraphics
     {
+        private List<Point>[] ascii;
         private int range;
 
-        // 0
-        private List<Point> setZero()
+        // INITIALIZATION
+        public ScopeGraphics()
         {
-            List<Point> points = new List<Point>();
+            // initialize all the point lists
+            ascii = new List<Point>[128];
 
-            for (int i = -10; i < 0; i++)       points.Add(new Point(i, 0));
-            for (int i = 0; i < 20; i++)        points.Add(new Point(0, i));
-            for (int i = 0; i > -10; i--)       points.Add(new Point(i, 20));
-            for (int i = 20; i > 0; i--)        points.Add(new Point(-10, i));
-            for (int i = -20; i < 2; i += 2)    points.Add(new Point((i / 2), i + 20));
+            for (int i = 0; i < 128; i++)
+            {
+                ascii[i] = new List<Point>();
+            }
 
-            trace(ref points);
+            // fill in all the points with their initial values
+            setZero();
+            setOne();
+            setTwo();
+            setThree();
+            setFour();
+            setFive();
+            setSix();
+            setSeven();
+            setEight();
+            setNine();
+            setColon();
+            setP();
+        }
 
-            return points;
+        // SET NUMBERS
+
+        // 0
+        private void setZero()
+        {
+            for (int i = -10; i < 0; i++) ascii[48].Add(new Point(i, 0));
+            for (int i = 0; i < 20; i++) ascii[48].Add(new Point(0, i));
+            for (int i = 0; i > -10; i--) ascii[48].Add(new Point(i, 20));
+            for (int i = 20; i > 0; i--) ascii[48].Add(new Point(-10, i));
+            for (int i = -20; i < 2; i += 2) ascii[48].Add(new Point((i / 2), i + 20));
+            trace(ascii[48]);
         }
 
         // 1
-        private List<Point> setOne()
+        private void setOne()
         {
-            List<Point> points = new List<Point>();
-
-            for (int i = -10; i < 0; i++)       points.Add(new Point(i, 0));
-            for (int i = 0; i > -4; i -= 2)     points.Add(new Point(i, 0));
-            for (int i = 0; i < 20; i++)        points.Add(new Point(-4, i));
-            for (int i = -4; i > -8; i--)       points.Add(new Point(i, 20));
-
-            trace(ref points);
-
-            return points;
+            for (int i = -10; i < 0; i++) ascii[49].Add(new Point(i, 0));
+            for (int i = 0; i > -4; i -= 2) ascii[49].Add(new Point(i, 0));
+            for (int i = 0; i < 20; i++) ascii[49].Add(new Point(-4, i));
+            for (int i = -4; i > -8; i--) ascii[49].Add(new Point(i, 20));
+            trace(ascii[49]);
         }
 
         // 2
-        private List<Point> setTwo()
+        private void setTwo()
         {
-            List<Point> points = new List<Point>();
-
-            for (int i = 0; i > -10; i--)       points.Add(new Point(i, 0));
-            for (int i = 0; i < 10; i++)        points.Add(new Point(-10, i));
-            for (int i = -10; i < 0; i++)       points.Add(new Point(i, 10));
-            for (int i = 10; i < 20; i++)       points.Add(new Point(0, i));
-            for (int i = 0; i > -10; i--)       points.Add(new Point(i, 20));
-
-            trace(ref points);
-
-            return points;
+            for (int i = 0; i > -10; i--) ascii[50].Add(new Point(i, 0));
+            for (int i = 0; i < 10; i++) ascii[50].Add(new Point(-10, i));
+            for (int i = -10; i < 0; i++) ascii[50].Add(new Point(i, 10));
+            for (int i = 10; i < 20; i++) ascii[50].Add(new Point(0, i));
+            for (int i = 0; i > -10; i--) ascii[50].Add(new Point(i, 20));
+            trace(ascii[50]);
         }
 
         // 3
-        private List<Point> setThree()
+        private void setThree()
         {
-            List<Point> points = new List<Point>();
-
-            for (int i = -10; i < 0; i++)       points.Add(new Point(i, 0));
-            for (int i = 0; i < 10; i++)        points.Add(new Point(0, i));
-            for (int i = 0; i > -8; i--)        points.Add(new Point(i, 10));
-            for (int i = -8; i < 0; i += 2)     points.Add(new Point(i, 10));
-            for (int i = 10; i < 20; i++)       points.Add(new Point(0, i));
-            for (int i = 0; i > -10; i--)       points.Add(new Point(i, 20));
-
-            trace(ref points);
-
-            return points;
+            for (int i = -10; i < 0; i++) ascii[51].Add(new Point(i, 0));
+            for (int i = 0; i < 10; i++) ascii[51].Add(new Point(0, i));
+            for (int i = 0; i > -8; i--) ascii[51].Add(new Point(i, 10));
+            for (int i = -8; i < 0; i += 2) ascii[51].Add(new Point(i, 10));
+            for (int i = 10; i < 20; i++) ascii[51].Add(new Point(0, i));
+            for (int i = 0; i > -10; i--) ascii[51].Add(new Point(i, 20));
+            trace(ascii[51]);
         }
 
         // 4
-        private List<Point> setFour()
+        private void setFour()
         {
-            List<Point> points = new List<Point>();
-
-            points.Add(new Point(0, 0));
-            points.Add(new Point(0, 0));
-            points.Add(new Point(0, 0));
-            points.Add(new Point(0, 0));
-
-            for (int i = 0; i < 20; i++)        points.Add(new Point(0, i));
-            for (int i = 20; i > 10; i -= 2)    points.Add(new Point(0, i));
-            for (int i = 0; i > -10; i--)       points.Add(new Point(i, 10));
-            for (int i = 10; i < 20; i++)       points.Add(new Point(-10, i));
-
-            trace(ref points);
-
-            return points;
+            ascii[52].Add(new Point(0, 0));
+            ascii[52].Add(new Point(0, 0));
+            ascii[52].Add(new Point(0, 0));
+            ascii[52].Add(new Point(0, 0));
+            for (int i = 0; i < 20; i++) ascii[52].Add(new Point(0, i));
+            for (int i = 20; i > 10; i -= 2) ascii[52].Add(new Point(0, i));
+            for (int i = 0; i > -10; i--) ascii[52].Add(new Point(i, 10));
+            for (int i = 10; i < 20; i++) ascii[52].Add(new Point(-10, i));
+            trace(ascii[52]);
         }
 
         // 5
-        private List<Point> setFive()
+        private void setFive()
         {
-            List<Point> points = new List<Point>();
-
-            for (int i = -10; i < 0; i++)       points.Add(new Point(i, 0));
-            for (int i = 0; i < 10; i++)        points.Add(new Point(0, i));
-            for (int i = 0; i > -10; i--)       points.Add(new Point(i, 10));
-            for (int i = 10; i < 20; i++)       points.Add(new Point(-10, i));
-            for (int i = -10; i < 0; i++)       points.Add(new Point(i, 20));
-
-            trace(ref points);
-
-            return points;
+            for (int i = -10; i < 0; i++) ascii[53].Add(new Point(i, 0));
+            for (int i = 0; i < 10; i++) ascii[53].Add(new Point(0, i));
+            for (int i = 0; i > -10; i--) ascii[53].Add(new Point(i, 10));
+            for (int i = 10; i < 20; i++) ascii[53].Add(new Point(-10, i));
+            for (int i = -10; i < 0; i++) ascii[53].Add(new Point(i, 20));
+            trace(ascii[53]);
         }
 
         // 6
-        private List<Point> setSix()
+        private void setSix()
         {
-            List<Point> points = new List<Point>();
-
-            for (int i = -10; i < 0; i++)       points.Add(new Point(i, 0));
-            for (int i = 0; i < 10; i++)        points.Add(new Point(0, i));
-            for (int i = 0; i > -10; i--)       points.Add(new Point(i, 10));
-            for (int i = 10; i > 0; i--)        points.Add(new Point(-10, i));
-            for (int i = 10; i < 20; i++)       points.Add(new Point(-10, i));
-            for (int i = -10; i < 0; i++)       points.Add(new Point(i, 20));
-
-            trace(ref points);
-
-            return points;
+            for (int i = -10; i < 0; i++) ascii[54].Add(new Point(i, 0));
+            for (int i = 0; i < 10; i++) ascii[54].Add(new Point(0, i));
+            for (int i = 0; i > -10; i--) ascii[54].Add(new Point(i, 10));
+            for (int i = 10; i > 0; i--) ascii[54].Add(new Point(-10, i));
+            for (int i = 10; i < 20; i++) ascii[54].Add(new Point(-10, i));
+            for (int i = -10; i < 0; i++) ascii[54].Add(new Point(i, 20));
+            trace(ascii[54]);
         }
 
         // 7
-        private List<Point> setSeven()
+        private void setSeven()
         {
-            List<Point> points = new List<Point>();
-
-            points.Add(new Point(0, 0));
-            points.Add(new Point(0, 0));
-            points.Add(new Point(0, 0));
-            points.Add(new Point(0, 0));
-
-            for (int i = 0; i < 20; i++)        points.Add(new Point(0, i));
-            for (int i = 0; i > -10; i--)       points.Add(new Point(i, 20));
-
-            trace(ref points);
-
-            return points;
+            ascii[55].Add(new Point(0, 0));
+            ascii[55].Add(new Point(0, 0));
+            ascii[55].Add(new Point(0, 0));
+            ascii[55].Add(new Point(0, 0));
+            for (int i = 0; i < 20; i++) ascii[55].Add(new Point(0, i));
+            for (int i = 0; i > -10; i--) ascii[55].Add(new Point(i, 20));
+            trace(ascii[55]);
         }
 
         // 8
-        private List<Point> setEight()
+        private void setEight()
         {
-            List<Point> points = new List<Point>();
-
-            for (int i = -10; i < 0; i++)       points.Add(new Point(i, 0));
-            for (int i = 0; i < 20; i++)        points.Add(new Point(0, i));
-            for (int i = 0; i > -10; i--)       points.Add(new Point(i, 20));
-            for (int i = 20; i > 10; i--)       points.Add(new Point(-10, i));
-            for (int i = -10; i < 0; i++)       points.Add(new Point(i, 10));
-            for (int i = 0; i > -10; i--)       points.Add(new Point(i, 10));
-            for (int i = 10; i > 0; i--)        points.Add(new Point(-10, i));
-
-            trace(ref points);
-
-            return points;
+            for (int i = -10; i < 0; i++) ascii[56].Add(new Point(i, 0));
+            for (int i = 0; i < 20; i++) ascii[56].Add(new Point(0, i));
+            for (int i = 0; i > -10; i--) ascii[56].Add(new Point(i, 20));
+            for (int i = 20; i > 10; i--) ascii[56].Add(new Point(-10, i));
+            for (int i = -10; i < 0; i++) ascii[56].Add(new Point(i, 10));
+            for (int i = 0; i > -10; i--) ascii[56].Add(new Point(i, 10));
+            for (int i = 10; i > 0; i--) ascii[56].Add(new Point(-10, i));
+            trace(ascii[56]);
         }
 
         // 9
-        private List<Point> setNine()
+        private void setNine()
         {
-            List<Point> points = new List<Point>();
-
-            for (int i = -10; i < 0; i++)       points.Add(new Point(i, 0));
-            for (int i = 0; i < 20; i++)        points.Add(new Point(0, i));
-            for (int i = 0; i > -10; i--)       points.Add(new Point(i, 20));
-            for (int i = 20; i > 10; i--)       points.Add(new Point(-10, i));
-            for (int i = -10; i < 0; i++)       points.Add(new Point(i, 10));
-
-            trace(ref points);
-
-            return points;
+            for (int i = -10; i < 0; i++) ascii[57].Add(new Point(i, 0));
+            for (int i = 0; i < 20; i++) ascii[57].Add(new Point(0, i));
+            for (int i = 0; i > -10; i--) ascii[57].Add(new Point(i, 20));
+            for (int i = 20; i > 10; i--) ascii[57].Add(new Point(-10, i));
+            for (int i = -10; i < 0; i++) ascii[57].Add(new Point(i, 10));
+            trace(ascii[57]);
         }
 
         // :
-        private List<Point> setColon()
+        private void setColon()
         {
-            List<Point> points = new List<Point>();
+            for (int i = 0; i < 20; i++) ascii[58].Add(new Point((int)(2 * Math.Cos(i) - 5), (int)(2 * Math.Sin(i)) + 3));
+            for (int i = 0; i < 20; i++) ascii[58].Add(new Point((int)(2 * Math.Cos(i) - 5), (int)(2 * Math.Sin(i)) + 17));
+            trace(ascii[58]);
+        }
 
-            for (int i = 0; i < 20; i++)        points.Add(new Point((int)(2 * Math.Cos(i) - 5), (int)(2 * Math.Sin(i)) + 3));
-            for (int i = 0; i < 20; i++)        points.Add(new Point((int)(2 * Math.Cos(i) - 5), (int)(2 * Math.Sin(i)) + 17));
+        // P
+        private void setP()
+        {
+            ascii[80].Add(new Point(0, 0));
+            ascii[80].Add(new Point(0, 0));
 
-            trace(ref points);
+            ascii[80].Add(new Point(0, 2));
 
-            return points;
+            ascii[80].Add(new Point(0, 4));
+            ascii[80].Add(new Point(0, 4));
+
+            ascii[80].Add(new Point(0, 6));
+
+            ascii[80].Add(new Point(0, 8));
+            ascii[80].Add(new Point(0, 8));
+
+            ascii[80].Add(new Point(3, 8));
+            ascii[80].Add(new Point(3, 8));
+
+            ascii[80].Add(new Point(4, 7));
+            ascii[80].Add(new Point(4, 7));
+
+            ascii[80].Add(new Point(4, 5));
+            ascii[80].Add(new Point(4, 5));
+
+            ascii[80].Add(new Point(3, 4));
+            ascii[80].Add(new Point(3, 4));
+
+            ascii[80].Add(new Point(0, 4));
+            trace(ascii[80]);
         }
 
         // TRACE
         // traces the character back to origin
-        private void trace(ref List<Point> p)
+        private void trace(List<Point> p)
         {
             for (int i = p.Count - 1; i > -1; i--)
             {
@@ -207,21 +214,7 @@ namespace Oscilloscope_Clock
         // returns points that correspond to an ASCII character
         public List<Point> getSingleChar(Char c)
         {
-            switch(c)
-            {
-                case '0': return setZero();
-                case '1': return setOne();
-                case '2': return setTwo();
-                case '3': return setThree();
-                case '4': return setFour();
-                case '5': return setFive();
-                case '6': return setSix();
-                case '7': return setSeven();
-                case '8': return setEight();
-                case '9': return setNine();
-                case ':': return setColon();
-                default: return new List<Point>();
-            }
+            return ascii[(int)c];
         }
 
         // RETURN STRING
