@@ -7,9 +7,6 @@ using System.Drawing;
 
 namespace Oscilloscope_Clock
 {
-    // This class contains badly-drawn characters that are returned based on ASCII input
-    // Don't worry, I will think of a way to only load them as needed, not all at once
-    // This is mostly a "proof of concept," and will be intended to operate on its own thread
     class ScopeGraphics
     {
         private List<Point>[] ascii;
@@ -38,7 +35,6 @@ namespace Oscilloscope_Clock
             setEight();
             setNine();
             setColon();
-            setP();
         }
 
         // SET NUMBERS
@@ -166,38 +162,6 @@ namespace Oscilloscope_Clock
             for (int i = 0; i < 20; i++) ascii[58].Add(new Point((int)(2 * Math.Cos(i) - 5), (int)(2 * Math.Sin(i)) + 3));
             for (int i = 0; i < 20; i++) ascii[58].Add(new Point((int)(2 * Math.Cos(i) - 5), (int)(2 * Math.Sin(i)) + 17));
             trace(ascii[58]);
-        }
-
-        // P
-        private void setP()
-        {
-            ascii[80].Add(new Point(0, 0));
-            ascii[80].Add(new Point(0, 0));
-
-            ascii[80].Add(new Point(0, 2));
-
-            ascii[80].Add(new Point(0, 4));
-            ascii[80].Add(new Point(0, 4));
-
-            ascii[80].Add(new Point(0, 6));
-
-            ascii[80].Add(new Point(0, 8));
-            ascii[80].Add(new Point(0, 8));
-
-            ascii[80].Add(new Point(3, 8));
-            ascii[80].Add(new Point(3, 8));
-
-            ascii[80].Add(new Point(4, 7));
-            ascii[80].Add(new Point(4, 7));
-
-            ascii[80].Add(new Point(4, 5));
-            ascii[80].Add(new Point(4, 5));
-
-            ascii[80].Add(new Point(3, 4));
-            ascii[80].Add(new Point(3, 4));
-
-            ascii[80].Add(new Point(0, 4));
-            trace(ascii[80]);
         }
 
         // TRACE
