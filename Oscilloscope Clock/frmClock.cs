@@ -15,54 +15,49 @@ namespace Oscilloscope_Clock
 {
     public partial class frmClock : Form
     {
-        // GLOBAL VARIABLES
-        BackgroundWorker displayWorker;
-        Thread runningThread;
-        SoundPlayer display;
-        List<Point> time;
-        ScopeGraphics graphics;
-        Boolean running;
+        BackgroundWorker TimeDisplayWorker;
+        SoundPlayer TimeDisplay;
+        Thread runningThread; // TODO: Replace this thread with a timer object
+        List<Point> TimePoints;
+        ScopeGraphics Graphics;
+        bool IsRunning;
 
-        // INITIALIZATION
         public frmClock()
         {
             InitializeComponent();
 
             // starts running
-            running = true;
+            IsRunning = true;
 
             // initialize the time and ASCII class
-            time = new List<Point>();
-            graphics = new ScopeGraphics();
+            TimePoints = new List<Point>();
+            Graphics = new ScopeGraphics();
 
             // clock display worker
-            displayWorker = new BackgroundWorker();
-            displayWorker.DoWork += new DoWorkEventHandler(displayWorker_DoWork);
-            displayWorker.WorkerSupportsCancellation = true;
+            TimeDisplayWorker = new BackgroundWorker();
+            TimeDisplayWorker.DoWork += new DoWorkEventHandler(TimeDisplayWorker_DoWork);
+            TimeDisplayWorker.WorkerSupportsCancellation = true;
 
             // clock running thread
-            runningThread = new Thread(run);
+            runningThread = new Thread(ClockSuperLoop);
         }
-
-        // LOAD FORM
+        
         private void frmClock_Load(object sender, EventArgs e)
         {
             runningThread.Start();
         }
 
-        // CLOSE FORM
         protected override void OnClosed(EventArgs e)
         {
-            display.Stop();
-            running = false;
-            runningThread.Abort();
+            EndClockSuperLoopAndExit();
         }
 
-        // GENERATES WAVE BASED ON PARAMETERS
-        // takes in two lists of points
-        // intended to be utilized with a BackgroundWorker
-        // TODO: Move this into its own class
-        public void genWave(List<Point> points)
+        /// <summary>
+        /// Generates a wave based on parameters.
+        /// This is intended to run async.
+        /// </summary>
+        /// <param name="points">Point list being converted to a wave file.</param>
+        public void CreateAndRunWave(List<Point> points)
         {
             // number of samples and size
             int samples = 441 * 30 / 10;
@@ -134,25 +129,20 @@ namespace Oscilloscope_Clock
                     MS.Seek(0, SeekOrigin.Begin);
 
                     // plays the shiny, new wave file
-                    using (display = new SoundPlayer(MS))
+                    using (TimeDisplay = new SoundPlayer(MS))
                     {
-                        display.PlayLooping();
+                        TimeDisplay.PlayLooping();
                     }
                 }
             }
 
         }
 
-        // CLOCK DISPLAY WORKER
-        // this is always running in the background
-        public void displayWorker_DoWork(object sender, DoWorkEventArgs e)
-        {
-            genWave(time);
-        }
-
-        // CLOCK ACTIONS
-        // the clock will always run as long as "running" is true
-        public void run()
+        /// <summary>
+        /// This is constantly updating the time and displaying the new time. 
+        /// The clock will always run as long as "running" is true.
+        /// </summary>
+        public void ClockSuperLoop()
         {
             // Stores the new time
             String newTime = "";
@@ -161,22 +151,34 @@ namespace Oscilloscope_Clock
             int sleep = 60 - int.Parse(DateTime.Now.ToString("ss"));
 
             // Always is running while the window is open
-            while (running)
+            while (IsRunning)
             {
                 if (!newTime.Equals(DateTime.Now.ToString("HH:mm")))
                 {
                     // Update the display
-                    if (displayWorker.IsBusy) display.Stop();
+                    if (TimeDisplayWorker.IsBusy) TimeDisplay.Stop();
                     newTime = DateTime.Now.ToString("HH:mm");
-                    time.Clear();
-                    time.AddRange(graphics.getString(newTime));
-                    displayWorker.RunWorkerAsync();
+                    TimePoints.Clear();
+                    TimePoints.AddRange(Graphics.GetAsciiString(newTime));
+                    TimeDisplayWorker.RunWorkerAsync();
 
                     // Clock will update every 60 seconds on every iteration after the first
                     Thread.Sleep(1000 * sleep);
                     if(sleep != 60) sleep = 60;
                 }
             }
+        }
+
+        public void TimeDisplayWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            CreateAndRunWave(TimePoints);
+        }
+
+        public void EndClockSuperLoopAndExit()
+        {
+            TimeDisplay.Stop();
+            IsRunning = false;
+            runningThread.Abort();
         }
     }
 }

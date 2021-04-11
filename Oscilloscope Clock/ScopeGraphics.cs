@@ -9,185 +9,211 @@ namespace Oscilloscope_Clock
 {
     class ScopeGraphics
     {
-        private List<Point>[] ascii;
-        private int range;
-
-        // INITIALIZATION
+        private List<Point>[] ASCII;
+        private int Range;
+        
         public ScopeGraphics()
         {
-            // initialize all the point lists
-            ascii = new List<Point>[128];
+            // We are only filling in the numbers in the ASCII table and a colon for now
+            ASCII = new List<Point>[128];
 
             for (int i = 0; i < 128; i++)
             {
-                ascii[i] = new List<Point>();
+                ASCII[i] = new List<Point>();
             }
-
-            // fill in all the points with their initial values
-            setZero();
-            setOne();
-            setTwo();
-            setThree();
-            setFour();
-            setFive();
-            setSix();
-            setSeven();
-            setEight();
-            setNine();
-            setColon();
+            
+            SetZero();
+            SetOne();
+            SetTwo();
+            SetThree();
+            SetFour();
+            SetFive();
+            SetSix();
+            SetSeven();
+            SetEight();
+            SetNine();
+            SetColon();
         }
 
-        // SET NUMBERS
-
-        // 0
-        private void setZero()
+        /// <summary>
+        /// Corresponds to ASCII 0
+        /// </summary>
+        private void SetZero()
         {
-            for (int i = -10; i < 0; i++) ascii[48].Add(new Point(i, 0));
-            for (int i = 0; i < 20; i++) ascii[48].Add(new Point(0, i));
-            for (int i = 0; i > -10; i--) ascii[48].Add(new Point(i, 20));
-            for (int i = 20; i > 0; i--) ascii[48].Add(new Point(-10, i));
-            for (int i = -20; i < 2; i += 2) ascii[48].Add(new Point((i / 2), i + 20));
-            trace(ascii[48]);
+            for (int i = -10; i < 0; i++) ASCII[48].Add(new Point(i, 0));
+            for (int i = 0; i < 20; i++) ASCII[48].Add(new Point(0, i));
+            for (int i = 0; i > -10; i--) ASCII[48].Add(new Point(i, 20));
+            for (int i = 20; i > 0; i--) ASCII[48].Add(new Point(-10, i));
+            for (int i = -20; i < 2; i += 2) ASCII[48].Add(new Point((i / 2), i + 20));
+            TraceToOrigin(ASCII[48]);
         }
 
-        // 1
-        private void setOne()
+        /// <summary>
+        /// Corresponds to ASCII 1
+        /// </summary>
+        private void SetOne()
         {
-            for (int i = -10; i < 0; i++) ascii[49].Add(new Point(i, 0));
-            for (int i = 0; i > -4; i -= 2) ascii[49].Add(new Point(i, 0));
-            for (int i = 0; i < 20; i++) ascii[49].Add(new Point(-4, i));
-            for (int i = -4; i > -8; i--) ascii[49].Add(new Point(i, 20));
-            trace(ascii[49]);
+            for (int i = -10; i < 0; i++) ASCII[49].Add(new Point(i, 0));
+            for (int i = 0; i > -4; i -= 2) ASCII[49].Add(new Point(i, 0));
+            for (int i = 0; i < 20; i++) ASCII[49].Add(new Point(-4, i));
+            for (int i = -4; i > -8; i--) ASCII[49].Add(new Point(i, 20));
+            TraceToOrigin(ASCII[49]);
         }
 
-        // 2
-        private void setTwo()
+        /// <summary>
+        /// Corresponds to ASCII 2
+        /// </summary>
+        private void SetTwo()
         {
-            for (int i = 0; i > -10; i--) ascii[50].Add(new Point(i, 0));
-            for (int i = 0; i < 10; i++) ascii[50].Add(new Point(-10, i));
-            for (int i = -10; i < 0; i++) ascii[50].Add(new Point(i, 10));
-            for (int i = 10; i < 20; i++) ascii[50].Add(new Point(0, i));
-            for (int i = 0; i > -10; i--) ascii[50].Add(new Point(i, 20));
-            trace(ascii[50]);
+            for (int i = 0; i > -10; i--) ASCII[50].Add(new Point(i, 0));
+            for (int i = 0; i < 10; i++) ASCII[50].Add(new Point(-10, i));
+            for (int i = -10; i < 0; i++) ASCII[50].Add(new Point(i, 10));
+            for (int i = 10; i < 20; i++) ASCII[50].Add(new Point(0, i));
+            for (int i = 0; i > -10; i--) ASCII[50].Add(new Point(i, 20));
+            TraceToOrigin(ASCII[50]);
         }
 
-        // 3
-        private void setThree()
+        /// <summary>
+        /// Corresponds to ASCII 3
+        /// </summary>
+        private void SetThree()
         {
-            for (int i = -10; i < 0; i++) ascii[51].Add(new Point(i, 0));
-            for (int i = 0; i < 10; i++) ascii[51].Add(new Point(0, i));
-            for (int i = 0; i > -8; i--) ascii[51].Add(new Point(i, 10));
-            for (int i = -8; i < 0; i += 2) ascii[51].Add(new Point(i, 10));
-            for (int i = 10; i < 20; i++) ascii[51].Add(new Point(0, i));
-            for (int i = 0; i > -10; i--) ascii[51].Add(new Point(i, 20));
-            trace(ascii[51]);
+            for (int i = -10; i < 0; i++) ASCII[51].Add(new Point(i, 0));
+            for (int i = 0; i < 10; i++) ASCII[51].Add(new Point(0, i));
+            for (int i = 0; i > -8; i--) ASCII[51].Add(new Point(i, 10));
+            for (int i = -8; i < 0; i += 2) ASCII[51].Add(new Point(i, 10));
+            for (int i = 10; i < 20; i++) ASCII[51].Add(new Point(0, i));
+            for (int i = 0; i > -10; i--) ASCII[51].Add(new Point(i, 20));
+            TraceToOrigin(ASCII[51]);
         }
 
-        // 4
-        private void setFour()
+        /// <summary>
+        /// Corresponds to ASCII 4
+        /// </summary>
+        private void SetFour()
         {
-            ascii[52].Add(new Point(0, 0));
-            ascii[52].Add(new Point(0, 0));
-            ascii[52].Add(new Point(0, 0));
-            ascii[52].Add(new Point(0, 0));
-            for (int i = 0; i < 20; i++) ascii[52].Add(new Point(0, i));
-            for (int i = 20; i > 10; i -= 2) ascii[52].Add(new Point(0, i));
-            for (int i = 0; i > -10; i--) ascii[52].Add(new Point(i, 10));
-            for (int i = 10; i < 20; i++) ascii[52].Add(new Point(-10, i));
-            trace(ascii[52]);
+            ASCII[52].Add(new Point(0, 0));
+            ASCII[52].Add(new Point(0, 0));
+            ASCII[52].Add(new Point(0, 0));
+            ASCII[52].Add(new Point(0, 0));
+            for (int i = 0; i < 20; i++) ASCII[52].Add(new Point(0, i));
+            for (int i = 20; i > 10; i -= 2) ASCII[52].Add(new Point(0, i));
+            for (int i = 0; i > -10; i--) ASCII[52].Add(new Point(i, 10));
+            for (int i = 10; i < 20; i++) ASCII[52].Add(new Point(-10, i));
+            TraceToOrigin(ASCII[52]);
         }
 
-        // 5
-        private void setFive()
+        /// <summary>
+        /// Corresponds to ASCII 5
+        /// </summary>
+        private void SetFive()
         {
-            for (int i = -10; i < 0; i++) ascii[53].Add(new Point(i, 0));
-            for (int i = 0; i < 10; i++) ascii[53].Add(new Point(0, i));
-            for (int i = 0; i > -10; i--) ascii[53].Add(new Point(i, 10));
-            for (int i = 10; i < 20; i++) ascii[53].Add(new Point(-10, i));
-            for (int i = -10; i < 0; i++) ascii[53].Add(new Point(i, 20));
-            trace(ascii[53]);
+            for (int i = -10; i < 0; i++) ASCII[53].Add(new Point(i, 0));
+            for (int i = 0; i < 10; i++) ASCII[53].Add(new Point(0, i));
+            for (int i = 0; i > -10; i--) ASCII[53].Add(new Point(i, 10));
+            for (int i = 10; i < 20; i++) ASCII[53].Add(new Point(-10, i));
+            for (int i = -10; i < 0; i++) ASCII[53].Add(new Point(i, 20));
+            TraceToOrigin(ASCII[53]);
         }
 
-        // 6
-        private void setSix()
+        /// <summary>
+        /// Corresponds to ASCII 6
+        /// </summary>
+        private void SetSix()
         {
-            for (int i = -10; i < 0; i++) ascii[54].Add(new Point(i, 0));
-            for (int i = 0; i < 10; i++) ascii[54].Add(new Point(0, i));
-            for (int i = 0; i > -10; i--) ascii[54].Add(new Point(i, 10));
-            for (int i = 10; i > 0; i--) ascii[54].Add(new Point(-10, i));
-            for (int i = 10; i < 20; i++) ascii[54].Add(new Point(-10, i));
-            for (int i = -10; i < 0; i++) ascii[54].Add(new Point(i, 20));
-            trace(ascii[54]);
+            for (int i = -10; i < 0; i++) ASCII[54].Add(new Point(i, 0));
+            for (int i = 0; i < 10; i++) ASCII[54].Add(new Point(0, i));
+            for (int i = 0; i > -10; i--) ASCII[54].Add(new Point(i, 10));
+            for (int i = 10; i > 0; i--) ASCII[54].Add(new Point(-10, i));
+            for (int i = 10; i < 20; i++) ASCII[54].Add(new Point(-10, i));
+            for (int i = -10; i < 0; i++) ASCII[54].Add(new Point(i, 20));
+            TraceToOrigin(ASCII[54]);
         }
 
-        // 7
-        private void setSeven()
+        /// <summary>
+        /// Corresponds to ASCII 7
+        /// </summary>
+        private void SetSeven()
         {
-            ascii[55].Add(new Point(0, 0));
-            ascii[55].Add(new Point(0, 0));
-            ascii[55].Add(new Point(0, 0));
-            ascii[55].Add(new Point(0, 0));
-            for (int i = 0; i < 20; i++) ascii[55].Add(new Point(0, i));
-            for (int i = 0; i > -10; i--) ascii[55].Add(new Point(i, 20));
-            trace(ascii[55]);
+            ASCII[55].Add(new Point(0, 0));
+            ASCII[55].Add(new Point(0, 0));
+            ASCII[55].Add(new Point(0, 0));
+            ASCII[55].Add(new Point(0, 0));
+            for (int i = 0; i < 20; i++) ASCII[55].Add(new Point(0, i));
+            for (int i = 0; i > -10; i--) ASCII[55].Add(new Point(i, 20));
+            TraceToOrigin(ASCII[55]);
         }
 
-        // 8
-        private void setEight()
+        /// <summary>
+        /// Corresponds to ASCII 8
+        /// </summary>
+        private void SetEight()
         {
-            for (int i = -10; i < 0; i++) ascii[56].Add(new Point(i, 0));
-            for (int i = 0; i < 20; i++) ascii[56].Add(new Point(0, i));
-            for (int i = 0; i > -10; i--) ascii[56].Add(new Point(i, 20));
-            for (int i = 20; i > 10; i--) ascii[56].Add(new Point(-10, i));
-            for (int i = -10; i < 0; i++) ascii[56].Add(new Point(i, 10));
-            for (int i = 0; i > -10; i--) ascii[56].Add(new Point(i, 10));
-            for (int i = 10; i > 0; i--) ascii[56].Add(new Point(-10, i));
-            trace(ascii[56]);
+            for (int i = -10; i < 0; i++) ASCII[56].Add(new Point(i, 0));
+            for (int i = 0; i < 20; i++) ASCII[56].Add(new Point(0, i));
+            for (int i = 0; i > -10; i--) ASCII[56].Add(new Point(i, 20));
+            for (int i = 20; i > 10; i--) ASCII[56].Add(new Point(-10, i));
+            for (int i = -10; i < 0; i++) ASCII[56].Add(new Point(i, 10));
+            for (int i = 0; i > -10; i--) ASCII[56].Add(new Point(i, 10));
+            for (int i = 10; i > 0; i--) ASCII[56].Add(new Point(-10, i));
+            TraceToOrigin(ASCII[56]);
         }
 
-        // 9
-        private void setNine()
+        /// <summary>
+        /// Corresponds to ASCII 9
+        /// </summary>
+        private void SetNine()
         {
-            for (int i = -10; i < 0; i++) ascii[57].Add(new Point(i, 0));
-            for (int i = 0; i < 20; i++) ascii[57].Add(new Point(0, i));
-            for (int i = 0; i > -10; i--) ascii[57].Add(new Point(i, 20));
-            for (int i = 20; i > 10; i--) ascii[57].Add(new Point(-10, i));
-            for (int i = -10; i < 0; i++) ascii[57].Add(new Point(i, 10));
-            trace(ascii[57]);
+            for (int i = -10; i < 0; i++) ASCII[57].Add(new Point(i, 0));
+            for (int i = 0; i < 20; i++) ASCII[57].Add(new Point(0, i));
+            for (int i = 0; i > -10; i--) ASCII[57].Add(new Point(i, 20));
+            for (int i = 20; i > 10; i--) ASCII[57].Add(new Point(-10, i));
+            for (int i = -10; i < 0; i++) ASCII[57].Add(new Point(i, 10));
+            TraceToOrigin(ASCII[57]);
         }
 
-        // :
-        private void setColon()
+        /// <summary>
+        /// Corresponds to ASCII :
+        /// </summary>
+        private void SetColon()
         {
-            for (int i = 0; i < 20; i++) ascii[58].Add(new Point((int)(2 * Math.Cos(i) - 5), (int)(2 * Math.Sin(i)) + 3));
-            for (int i = 0; i < 20; i++) ascii[58].Add(new Point((int)(2 * Math.Cos(i) - 5), (int)(2 * Math.Sin(i)) + 17));
-            trace(ascii[58]);
+            for (int i = 0; i < 20; i++) ASCII[58].Add(new Point((int)(2 * Math.Cos(i) - 5), (int)(2 * Math.Sin(i)) + 3));
+            for (int i = 0; i < 20; i++) ASCII[58].Add(new Point((int)(2 * Math.Cos(i) - 5), (int)(2 * Math.Sin(i)) + 17));
+            TraceToOrigin(ASCII[58]);
         }
 
-        // TRACE
-        // traces the character back to origin
-        private void trace(List<Point> p)
+
+        /// <summary>
+        /// Traces a point list back to its origin.
+        /// </summary>
+        private void TraceToOrigin(List<Point> p)
         {
             for (int i = p.Count - 1; i > -1; i--)
             {
                 p.Add(new Point(p[i].X, p[i].Y));
             }
         }
-
-        // RETURN CHAR
-        // returns points that correspond to an ASCII character
-        public List<Point> getSingleChar(Char c)
+        
+        /// <summary>
+        /// Converts a character to a point array.
+        /// </summary>
+        /// <param name="c">Character desired to be converted to a point array.</param>
+        /// <returns>Point array corresponding to the character.</returns>
+        public List<Point> GetAsciiChar(Char c)
         {
-            return ascii[(int)c];
+            return ASCII[(int)c];
         }
-
-        // RETURN STRING
-        // returns points that correspond to a string of ASCII characters
-        public List<Point> getString(String s)
+        
+        /// <summary>
+        /// Converts ASCII string to a point array
+        /// </summary>
+        /// <param name="s">String desired to be converted to a point array.</param>
+        /// <returns>Point array corresponding to the string.</returns>
+        public List<Point> GetAsciiString(String s)
         {
             List<Point> sPoints = new List<Point>();
             List<Point> nextChar = new List<Point>();
-            range = 0;
+            Range = 0;
 
             // X and Y offset values for character placement
             int xMove = 0;
@@ -197,7 +223,7 @@ namespace Oscilloscope_Clock
                 if ((int)c != 13)
                 {
                     // loads the next character into nextChar
-                    nextChar.AddRange(getSingleChar(c));
+                    nextChar.AddRange(GetAsciiChar(c));
 
                     for (int i = 0; i < (nextChar.Count); i++)
                     {
@@ -205,8 +231,8 @@ namespace Oscilloscope_Clock
                         nextChar[i] = new Point((nextChar[i].X + xMove), (nextChar[i].Y + yMove));
 
                         // determines what the largest coordinate is
-                        if (Math.Abs(nextChar[i].X) > range) range = nextChar[i].X;
-                        if (Math.Abs(nextChar[i].Y) > range) range = nextChar[i].Y;
+                        if (Math.Abs(nextChar[i].X) > Range) Range = nextChar[i].X;
+                        if (Math.Abs(nextChar[i].Y) > Range) Range = nextChar[i].Y;
                     }
 
                     // adds nextChar to the output list if it is within the range
@@ -228,11 +254,14 @@ namespace Oscilloscope_Clock
             return sPoints;
         }
 
-        // RETURN COORDINATE RANGE
-        // returns the largest X or Y coordinate
-        public int getRange(int size)
+        /// <summary>
+        /// Calculates the largest X or Y axis range based on the font size provided.
+        /// </summary>
+        /// <param name="size">Font size.</param>
+        /// <returns>Largest axis range.</returns>
+        public int GetRange(int size)
         {
-            return range * size * 100;
+            return Range * size * 100;
         }
     }
 }
