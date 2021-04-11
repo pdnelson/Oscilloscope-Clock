@@ -47,8 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ASCII.cs" />
-    <Compile Include="Clock.cs" />
+    <Compile Include="ScopeGraphics.cs" />
     <Compile Include="frmClock.cs">
       <SubType>Form</SubType>
     </Compile>

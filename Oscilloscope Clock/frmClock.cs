@@ -53,8 +53,9 @@ namespace Oscilloscope_Clock
         // CLOSE FORM
         protected override void OnClosed(EventArgs e)
         {
+            display.Stop();
             running = false;
-            runningThread.Join();
+            runningThread.Abort();
         }
 
         // GENERATES WAVE BASED ON PARAMETERS
@@ -157,7 +158,7 @@ namespace Oscilloscope_Clock
             String newTime = "";
 
             // Clock update timer
-            int sleep = 60 - Int32.Parse(DateTime.Now.ToString("ss"));
+            int sleep = 60 - int.Parse(DateTime.Now.ToString("ss"));
 
             // Always is running while the window is open
             while (running)
@@ -175,7 +176,6 @@ namespace Oscilloscope_Clock
                     Thread.Sleep(1000 * sleep);
                     if(sleep != 60) sleep = 60;
                 }
-
             }
         }
     }
