@@ -1,11 +1,11 @@
 # Oscilloscope-Clock
 
 Setup Instructions:
-  Make sure your 'scope is set to X-Y mode
-  Connect X to the RIGHT audio channel
-  Connect Y to the LEFT audio
-  Adjust your 'scope to fit the display as necessary
-
+- Make sure your 'scope is set to X-Y mode
+- Connect X to the RIGHT audio channel
+- Connect Y to the LEFT audio
+- Adjust your 'scope to fit the display as necessary
+  
 Now your oscilloscope is a digital clock!
 
 
