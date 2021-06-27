@@ -50,7 +50,9 @@
             this.ClientSize = new System.Drawing.Size(403, 182);
             this.Controls.Add(this.lblInstructions);
             this.ForeColor = System.Drawing.Color.White;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
             this.Name = "frmClock";
             this.Text = "Digital Oscilloscope Clock";
             this.Load += new System.EventHandler(this.frmClock_Load);
