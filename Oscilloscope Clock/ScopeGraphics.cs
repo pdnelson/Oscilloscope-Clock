@@ -230,12 +230,12 @@ namespace Oscilloscope_Clock
                     {
                         // pushes all the coordinates of nextChar according to the offset
                         nextChar[i] = new Point(
-                            (nextChar[i].X + xMove) * 85 * CharacterSize, 
+                            ((nextChar[i].X + xMove) * 85 * CharacterSize), 
                             (nextChar[i].Y + yMove) * 100 * CharacterSize
                         );
 
                         // If the text is too large to fit, return null so we know an error has occurred
-                        if(nextChar[i].X > Int16.MaxValue || nextChar[i].Y > Int16.MaxValue)
+                        if(nextChar[i].X > Int16.MaxValue || nextChar[i].X < Int16.MinValue || nextChar[i].Y > Int16.MaxValue || nextChar[i].Y < Int16.MinValue)
                         {
                             return null;
                         }
