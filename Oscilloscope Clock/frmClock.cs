@@ -93,12 +93,8 @@ namespace Oscilloscope_Clock
         /// <param name="points">Point list being converted to a wave file.</param>
         public void CreateAndRunWave(List<Point> points)
         {
-            // number of samples and size
-            int samples = 441 * 30 / 10;
-            int bytes = samples * 4;
-
-            // a counter for the number of samples written
-            int sampWritten = 0;
+            // Byte size of the Wave we are going to be creating
+            int bytes = points.Count * 4;
 
             using (MemoryStream MS = new MemoryStream(44 + bytes))
             {
@@ -139,21 +135,10 @@ namespace Oscilloscope_Clock
                     // Bits/sample
                     BW.Write(bytes);
 
-                    short Sample = 5;
-
-                    // loops the array inside the wave
-                    int i = 0;
-                    while (sampWritten < samples)
+                    foreach (Point sample in points)
                     {
-                        // writes X and Y data on appropriate channels
-                        Sample = Convert.ToInt16(points[i].Y);
-                        BW.Write(Sample);
-                        Sample = Convert.ToInt16(points[i].X);
-                        BW.Write(Sample);
-
-                        if (i >= (points.Count - 1)) i = 0;
-                        else i++;
-                        sampWritten++;
+                        BW.Write(Convert.ToInt16(sample.Y));
+                        BW.Write(Convert.ToInt16(sample.X));
                     }
 
                     // end-of-the-day clean-up stuff
