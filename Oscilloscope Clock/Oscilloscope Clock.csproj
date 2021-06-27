@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="OscilloscopeWavePlayer.cs" />
     <Compile Include="ScopeGraphics.cs" />
     <Compile Include="frmClock.cs">
       <SubType>Form</SubType>

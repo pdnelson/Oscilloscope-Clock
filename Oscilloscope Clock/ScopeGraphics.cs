@@ -230,7 +230,7 @@ namespace Oscilloscope_Clock
                     {
                         // pushes all the coordinates of nextChar according to the offset
                         nextChar[i] = new Point(
-                            ((nextChar[i].X + xMove) * 85 * CharacterSize), 
+                            (nextChar[i].X + xMove) * 85 * CharacterSize, 
                             (nextChar[i].Y + yMove) * 100 * CharacterSize
                         );
 
