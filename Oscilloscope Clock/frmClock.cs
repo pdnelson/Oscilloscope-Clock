@@ -122,8 +122,6 @@ namespace Oscilloscope_Clock
                         sampWritten++;
                     }
 
-
-
                     // end-of-the-day clean-up stuff
                     BW.Flush();
                     MS.Seek(0, SeekOrigin.Begin);
@@ -147,9 +145,6 @@ namespace Oscilloscope_Clock
             // Stores the new time
             String newTime = "";
 
-            // Clock update timer
-            int sleep = 60 - int.Parse(DateTime.Now.ToString("ss"));
-
             // Always is running while the window is open
             while (IsRunning)
             {
@@ -161,11 +156,8 @@ namespace Oscilloscope_Clock
                     TimePoints.Clear();
                     TimePoints.AddRange(Graphics.GetAsciiString(newTime));
                     TimeDisplayWorker.RunWorkerAsync();
-
-                    // Clock will update every 60 seconds on every iteration after the first
-                    Thread.Sleep(1000 * sleep);
-                    if(sleep != 60) sleep = 60;
                 }
+                Thread.Sleep(250);
             }
         }
 
@@ -178,7 +170,7 @@ namespace Oscilloscope_Clock
         {
             TimeDisplay.Stop();
             IsRunning = false;
-            runningThread.Abort();
+            runningThread.Join();
         }
     }
 }
