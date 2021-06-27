@@ -128,10 +128,7 @@ Now your oscilloscope is a digital clock!
 
 
 WARNING: If you are using integrated audio, there may
-be interference, and the lines will not be as precise.
-
-
--Patrick Nelson (2019)</value>
+be interference, and the lines will not be as precise.</value>
   </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">

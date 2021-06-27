@@ -17,7 +17,7 @@ namespace Oscilloscope_Clock
     {
         BackgroundWorker TimeDisplayWorker;
         SoundPlayer TimeDisplay;
-        Thread runningThread; // TODO: Replace this thread with a timer object
+        Thread runningThread;
         List<Point> TimePoints;
         ScopeGraphics Graphics;
         bool IsRunning;
@@ -26,19 +26,33 @@ namespace Oscilloscope_Clock
         {
             InitializeComponent();
 
-            // starts running
+            cboTimeConvention.SelectedIndex = 1;
+
+            // Populate the character spacing combo box
+            for(int i = 12; i <= 30; i++)
+            {
+                cboCharSpacing.Items.Add(i);
+            }
+            cboCharSpacing.SelectedIndex = 0;
+
+            // Populate the font size combo box
+            for(int i = 1; i <= 9; i++)
+            {
+                cboFontSize.Items.Add(i);
+            }
+            cboFontSize.SelectedIndex = 7;
+
             IsRunning = true;
 
-            // initialize the time and ASCII class
             TimePoints = new List<Point>();
             Graphics = new ScopeGraphics();
+            Graphics.CharacterSize = 8;
+            Graphics.CharacterSpacing = 12;
 
-            // clock display worker
             TimeDisplayWorker = new BackgroundWorker();
             TimeDisplayWorker.DoWork += new DoWorkEventHandler(TimeDisplayWorker_DoWork);
             TimeDisplayWorker.WorkerSupportsCancellation = true;
 
-            // clock running thread
             runningThread = new Thread(ClockSuperLoop);
         }
         
@@ -50,6 +64,26 @@ namespace Oscilloscope_Clock
         protected override void OnClosed(EventArgs e)
         {
             EndClockSuperLoopAndExit();
+        }
+
+        private void cboFontSize_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // If Graphics is null, then the program has not fully started up yet
+            if (Graphics != null)
+            {
+                Graphics.CharacterSize = cboFontSize.SelectedIndex + 1;
+                RestartClockWithNewTime(DateTime.Now.ToString("HH:mm"));
+            }
+        }
+
+        private void cboCharSpacing_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // If Graphics is null, then the program has not fully started up yet
+            if (Graphics != null)
+            {
+                Graphics.CharacterSpacing = cboCharSpacing.SelectedIndex + 12;
+                RestartClockWithNewTime(DateTime.Now.ToString("HH:mm"));
+            }
         }
 
         /// <summary>
@@ -112,9 +146,9 @@ namespace Oscilloscope_Clock
                     while (sampWritten < samples)
                     {
                         // writes X and Y data on appropriate channels
-                        Sample = System.Convert.ToInt16(800 * points[i].Y);
+                        Sample = Convert.ToInt16(points[i].Y);
                         BW.Write(Sample);
-                        Sample = System.Convert.ToInt16(675 * points[i].X);
+                        Sample = Convert.ToInt16(points[i].X);
                         BW.Write(Sample);
 
                         if (i >= (points.Count - 1)) i = 0;
@@ -151,11 +185,8 @@ namespace Oscilloscope_Clock
                 if (!newTime.Equals(DateTime.Now.ToString("HH:mm")))
                 {
                     // Update the display
-                    if (TimeDisplayWorker.IsBusy) TimeDisplay.Stop();
                     newTime = DateTime.Now.ToString("HH:mm");
-                    TimePoints.Clear();
-                    TimePoints.AddRange(Graphics.GetAsciiString(newTime));
-                    TimeDisplayWorker.RunWorkerAsync();
+                    RestartClockWithNewTime(newTime);
                 }
                 Thread.Sleep(250);
             }
@@ -164,6 +195,30 @@ namespace Oscilloscope_Clock
         public void TimeDisplayWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             CreateAndRunWave(TimePoints);
+        }
+
+        // This should be used if the time changes or if a setting changes that yields a different display
+        public void RestartClockWithNewTime(String newTime)
+        {
+            if (TimeDisplayWorker != null)
+            {
+                List<Point> newPoints = Graphics.GetPointsFromAsciiString(newTime);
+
+                if (newPoints != null)
+                {
+                    lblError.Text = "";
+                    if (TimeDisplayWorker.IsBusy) TimeDisplay.Stop();
+                    TimePoints.Clear();
+                    TimePoints.AddRange(newPoints);
+                    TimeDisplayWorker.RunWorkerAsync();
+                }
+                else
+                {
+                    lblError.Text = 
+                        "Error: The font size is too large for the selected" +
+                        "\ncharacter spacing.";
+                }
+            }
         }
 
         public void EndClockSuperLoopAndExit()

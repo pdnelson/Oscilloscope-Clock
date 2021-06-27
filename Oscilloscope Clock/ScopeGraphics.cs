@@ -10,7 +10,9 @@ namespace Oscilloscope_Clock
     class ScopeGraphics
     {
         private List<Point>[] ASCII;
-        private int Range;
+
+        public int CharacterSize { get; set; }
+        public int CharacterSpacing { get; set; }
         
         public ScopeGraphics()
         {
@@ -199,40 +201,44 @@ namespace Oscilloscope_Clock
         /// </summary>
         /// <param name="c">Character desired to be converted to a point array.</param>
         /// <returns>Point array corresponding to the character.</returns>
-        public List<Point> GetAsciiChar(Char c)
+        public List<Point> GetPointsFromAsciiChar(Char c)
         {
-            return ASCII[(int)c];
+            return ASCII[c];
         }
         
         /// <summary>
         /// Converts ASCII string to a point array
         /// </summary>
         /// <param name="s">String desired to be converted to a point array.</param>
-        /// <returns>Point array corresponding to the string.</returns>
-        public List<Point> GetAsciiString(String s)
+        /// <returns>Point array corresponding to the string; null if the points' coordinates are outside the max Int16 range.</returns>
+        public List<Point> GetPointsFromAsciiString(String s)
         {
             List<Point> sPoints = new List<Point>();
             List<Point> nextChar = new List<Point>();
-            Range = 0;
 
             // X and Y offset values for character placement
             int xMove = 0;
             int yMove = 0;
             foreach (char c in s)
             {
-                if ((int)c != 13)
+                if (c != 13)
                 {
                     // loads the next character into nextChar
-                    nextChar.AddRange(GetAsciiChar(c));
+                    nextChar.AddRange(GetPointsFromAsciiChar(c));
 
                     for (int i = 0; i < (nextChar.Count); i++)
                     {
                         // pushes all the coordinates of nextChar according to the offset
-                        nextChar[i] = new Point((nextChar[i].X + xMove), (nextChar[i].Y + yMove));
+                        nextChar[i] = new Point(
+                            (nextChar[i].X + xMove) * 85 * CharacterSize, 
+                            (nextChar[i].Y + yMove) * 100 * CharacterSize
+                        );
 
-                        // determines what the largest coordinate is
-                        if (Math.Abs(nextChar[i].X) > Range) Range = nextChar[i].X;
-                        if (Math.Abs(nextChar[i].Y) > Range) Range = nextChar[i].Y;
+                        // If the text is too large to fit, return null so we know an error has occurred
+                        if(nextChar[i].X > Int16.MaxValue || nextChar[i].Y > Int16.MaxValue)
+                        {
+                            return null;
+                        }
                     }
 
                     // adds nextChar to the output list if it is within the range
@@ -240,28 +246,18 @@ namespace Oscilloscope_Clock
                     nextChar.Clear();
 
                     // add to offset to position next character
-                    xMove += 12;
+                    xMove += CharacterSpacing;
                 }
 
                 // if the character is enter, updates X and Y offset
                 else
                 {
-                    xMove = -12;
+                    xMove = -CharacterSpacing;
                     yMove -= 24;
                 }
             }
 
             return sPoints;
-        }
-
-        /// <summary>
-        /// Calculates the largest X or Y axis range based on the font size provided.
-        /// </summary>
-        /// <param name="size">Font size.</param>
-        /// <returns>Largest axis range.</returns>
-        public int GetRange(int size)
-        {
-            return Range * size * 100;
         }
     }
 }
