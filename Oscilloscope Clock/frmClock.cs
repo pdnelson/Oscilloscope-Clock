@@ -19,8 +19,6 @@ namespace Oscilloscope_Clock
 
             WavePlayer = new OscilloscopeWavePlayer();
 
-            cboTimeConvention.SelectedIndex = 1;
-
             IsRunning = true;
 
             Graphics = new ScopeGraphics();
@@ -59,27 +57,11 @@ namespace Oscilloscope_Clock
                 {
                     // Update the display
                     newTime = DateTime.Now.ToString("HH:mm");
-                    RestartClockWithNewTime(newTime);
+                    List<Point> newPoints = Graphics.GetPointsFromAsciiString(newTime);
+
+                    WavePlayer.BuildAndPlayWaveAsync(newPoints);
                 }
                 Thread.Sleep(250);
-            }
-        }
-
-        // This should be used if the time changes or if a setting changes that yields a different display
-        public void RestartClockWithNewTime(String newTime)
-        {
-            List<Point> newPoints = Graphics.GetPointsFromAsciiString(newTime);
-
-            if (newPoints != null)
-            {
-                lblError.Text = "";
-                WavePlayer.BuildAndPlayWaveAsync(newPoints);
-            }
-            else
-            {
-                lblError.Text = 
-                    "Error: The font size is too large for the selected" +
-                    "\ncharacter spacing.";
             }
         }
     }
