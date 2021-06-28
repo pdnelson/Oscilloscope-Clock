@@ -5,15 +5,17 @@ using System.IO;
 using System.Linq;
 using System.Media;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Oscilloscope_Clock
 {
-    public class OscilloscopeWavePlayer
+    public class OscilloscopeWavePlayer : IDisposable
     {
         private SoundPlayer TimeDisplay;
         private MemoryStream MS;
         private BinaryWriter BW;
+        private Thread PlayWaveThread;
         public bool IsPlaying;
 
         public OscilloscopeWavePlayer()
@@ -22,8 +24,7 @@ namespace Oscilloscope_Clock
         }
 
         /// <summary>
-        /// Generates a wave based on parameters.
-        /// This is intended to run async.
+        /// Generates a wave based on a point array.
         /// </summary>
         /// <param name="points">Point list being converted to a wave file.</param>
         public void BuildWave(List<Point> points)
@@ -32,7 +33,6 @@ namespace Oscilloscope_Clock
             int bytes = points.Count * 4;
 
             MS = new MemoryStream(44 + bytes);
-
             BW = new BinaryWriter(MS);
 
             //* BEGIN HEADER *//
@@ -85,8 +85,12 @@ namespace Oscilloscope_Clock
 
         }
 
+        /// <summary>
+        /// Plays the built wave.
+        /// </summary>
         public void PlayWave()
         {
+            if (IsPlaying) StopWave();
             IsPlaying = true;
             using (TimeDisplay = new SoundPlayer(MS))
             {
@@ -94,12 +98,60 @@ namespace Oscilloscope_Clock
             }
         }
 
+        /// <summary>
+        /// Plays the built wave  in a separate thread from the main one.
+        /// </summary>
+        public void PlayWaveAsync()
+        {
+            if(PlayWaveThread.IsAlive)
+            {
+                throw new InvalidOperationException("Cannot play wave async while another wave is playing async.");
+            }
+
+            PlayWaveThread = new Thread(() =>
+            {
+                PlayWave();
+            });
+
+            PlayWaveThread.Start();
+        }
+
+        /// <summary>
+        /// Builds and plays a wave file based on a point array in a separate thread from the main one.
+        /// If the wave is already playing, it will be terminated and restarted.
+        /// </summary>
+        /// <param name="points">The points to be turned into a wave file.</param>
+        public void BuildAndPlayWaveAsync(List<Point> points)
+        {
+            if(IsPlaying) StopWave();
+            Dispose();
+
+            PlayWaveThread = new Thread(() =>
+            {
+                BuildWave(points);
+                PlayWave();
+            });
+
+            PlayWaveThread.Start();
+        }
+
+        /// <summary>
+        /// Stops the currently-playing wave file.
+        /// </summary>
         public void StopWave()
         {
-            IsPlaying = false;
-            TimeDisplay.Stop();
-            BW.Dispose();
-            MS.Dispose();
+            if (IsPlaying)
+            {
+                IsPlaying = false;
+                TimeDisplay.Stop();
+                if (PlayWaveThread.IsAlive) PlayWaveThread.Join();
+            }
+        }
+
+        public void Dispose()
+        {
+            if(BW != null) BW.Dispose();
+            if(MS != null) MS.Dispose();
         }
     }
 }

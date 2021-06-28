@@ -29,11 +29,11 @@ namespace Oscilloscope_Clock
             cboTimeConvention.SelectedIndex = 1;
 
             // Populate the character spacing combo box
-            for(int i = 12; i <= 30; i++)
+            for(int i = 0; i <= 30; i++)
             {
                 cboCharSpacing.Items.Add(i);
             }
-            cboCharSpacing.SelectedIndex = 0;
+            cboCharSpacing.SelectedIndex = 12;
 
             // Populate the font size combo box
             for(int i = 1; i <= 9; i++)
@@ -76,7 +76,7 @@ namespace Oscilloscope_Clock
             // If Graphics is null, then the program has not fully started up yet
             if (Graphics != null)
             {
-                Graphics.CharacterSpacing = cboCharSpacing.SelectedIndex + 12;
+                Graphics.CharacterSpacing = cboCharSpacing.SelectedIndex;
                 RestartClockWithNewTime(DateTime.Now.ToString("HH:mm"));
             }
         }
@@ -111,15 +111,7 @@ namespace Oscilloscope_Clock
             if (newPoints != null)
             {
                 lblError.Text = "";
-                if (WavePlayer.IsPlaying) WavePlayer.StopWave();
-
-                Thread wavePlayingThread = new Thread(() =>
-                {
-                    WavePlayer.BuildWave(newPoints);
-                    WavePlayer.PlayWave();
-                });
-
-                wavePlayingThread.Start();
+                WavePlayer.BuildAndPlayWaveAsync(newPoints);
             }
             else
             {
@@ -132,6 +124,7 @@ namespace Oscilloscope_Clock
         public void EndClockSuperLoopAndExit()
         {
             WavePlayer.StopWave();
+            WavePlayer.Dispose();
             IsRunning = false;
             runningThread.Join();
         }
