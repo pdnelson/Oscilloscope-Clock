@@ -1,15 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Threading;
 using System.Windows.Forms;
-using System.IO;
-using System.Media;
 
 namespace Oscilloscope_Clock
 {
@@ -28,25 +21,11 @@ namespace Oscilloscope_Clock
 
             cboTimeConvention.SelectedIndex = 1;
 
-            // Populate the character spacing combo box
-            for(int i = 0; i <= 30; i++)
-            {
-                cboCharSpacing.Items.Add(i);
-            }
-            cboCharSpacing.SelectedIndex = 12;
-
-            // Populate the font size combo box
-            for(int i = 1; i <= 9; i++)
-            {
-                cboFontSize.Items.Add(i);
-            }
-            cboFontSize.SelectedIndex = 7;
-
             IsRunning = true;
 
             Graphics = new ScopeGraphics();
-            Graphics.CharacterSize = 8;
-            Graphics.CharacterSpacing = 12;
+            Graphics.CharacterSize = 6;
+            Graphics.CharacterSpacing = 15;
 
             runningThread = new Thread(ClockSuperLoop);
         }
@@ -58,27 +37,10 @@ namespace Oscilloscope_Clock
 
         protected override void OnClosed(EventArgs e)
         {
-            EndClockSuperLoopAndExit();
-        }
-
-        private void cboFontSize_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            // If Graphics is null, then the program has not fully started up yet
-            if (Graphics != null)
-            {
-                Graphics.CharacterSize = cboFontSize.SelectedIndex + 1;
-                RestartClockWithNewTime(DateTime.Now.ToString("HH:mm"));
-            }
-        }
-
-        private void cboCharSpacing_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            // If Graphics is null, then the program has not fully started up yet
-            if (Graphics != null)
-            {
-                Graphics.CharacterSpacing = cboCharSpacing.SelectedIndex;
-                RestartClockWithNewTime(DateTime.Now.ToString("HH:mm"));
-            }
+            WavePlayer.StopWave();
+            WavePlayer.Dispose();
+            IsRunning = false;
+            runningThread.Join();
         }
 
         /// <summary>
@@ -119,14 +81,6 @@ namespace Oscilloscope_Clock
                     "Error: The font size is too large for the selected" +
                     "\ncharacter spacing.";
             }
-        }
-
-        public void EndClockSuperLoopAndExit()
-        {
-            WavePlayer.StopWave();
-            WavePlayer.Dispose();
-            IsRunning = false;
-            runningThread.Join();
         }
     }
 }
