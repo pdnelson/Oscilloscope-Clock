@@ -14,6 +14,7 @@ namespace Oscilloscope_Clock
         private MemoryStream MS;
         private BinaryWriter BW;
         private Thread PlayWaveThread;
+        private object WavePlayLock = new object();
         public bool IsPlaying { get; set; }
         public int ImageAmplificationX { get; set; }
         public int ImageAmplificationY { get; set; }
@@ -105,17 +106,16 @@ namespace Oscilloscope_Clock
         /// </summary>
         public void PlayWaveAsync()
         {
-            if(PlayWaveThread.IsAlive)
+            if (Monitor.TryEnter(WavePlayLock))
             {
-                throw new InvalidOperationException("Cannot play wave async while another wave is playing async.");
+                PlayWaveThread = new Thread(() =>
+                {
+                    PlayWave();
+                });
+
+                PlayWaveThread.Start();
+                Monitor.Exit(WavePlayLock);
             }
-
-            PlayWaveThread = new Thread(() =>
-            {
-                PlayWave();
-            });
-
-            PlayWaveThread.Start();
         }
 
         /// <summary>
@@ -125,16 +125,18 @@ namespace Oscilloscope_Clock
         /// <param name="points">The points to be turned into a wave file.</param>
         public void BuildAndPlayWaveAsync(List<Point> points)
         {
-            if(IsPlaying) StopWave();
-            Dispose();
-
-            PlayWaveThread = new Thread(() =>
+            if (Monitor.TryEnter(WavePlayLock))
             {
-                BuildWave(points);
-                PlayWave();
-            });
+                PlayWaveThread = new Thread(() =>
+                {
+                    Dispose();
+                    BuildWave(points);
+                    PlayWave();
+                });
 
-            PlayWaveThread.Start();
+                PlayWaveThread.Start();
+                Monitor.Exit(WavePlayLock);
+            }
         }
 
         /// <summary>
